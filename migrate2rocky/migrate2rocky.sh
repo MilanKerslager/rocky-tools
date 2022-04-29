@@ -1016,6 +1016,11 @@ EOF
             if [[ -z $pkg ]]; then
                 continue
             fi
+	    # do not remove own packages in case of fixing partial migration
+	    if [[ "$pkg" == "rocky-"* ]]; then
+	        printf 'not removing own package: %s\n' "$pkg"
+	        continue
+	    fi
             printf '%s\n' "$pkg"
             saferpm -e --allmatches --nodeps "$pkg" ||
             saferpm -e --allmatches --nodeps --noscripts --notriggers "$pkg"
